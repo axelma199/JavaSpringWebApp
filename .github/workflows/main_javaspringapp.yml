@@ -59,5 +59,6 @@ jobs:
         with:
           app-name: 'JavaSpringApp'
           slot-name: 'Production'
-          package: '*.war'
+          package: '*.jar'
           
+
