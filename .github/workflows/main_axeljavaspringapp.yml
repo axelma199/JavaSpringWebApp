@@ -29,3 +29,38 @@ jobs:
 
       - name: List build output (debugging)
         run: ls -la target
+
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v4
+        with:
+          name: java-app
+          path: target/*.jar
+
+  # ----------------------
+  # 2️⃣ DEPLOY JOB
+  # ----------------------
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    permissions:
+      id-token: write     # Required for OIDC login
+      contents: read
+
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v4
+        with:
+          name: java-app
+
+      - name: 'Login to Azure using OIDC'
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_374E6DBC1EF14972B2A84D9DB560A127 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_55B9464E72AB4B7A9185B2B95F09A8A2 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_C8B155A2A05C47D293BB3FB5E13EBB66 }}
+
+      - name: 'Deploy to Azure Web App'
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: AxelJavaSpringApp
+          package: '*.jar'
