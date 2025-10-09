@@ -4,6 +4,7 @@ env:
   AZURE_WEBAPP_NAME: AxelJavaSpringApp       # Your Azure Web App name
   JAVA_VERSION: '11'                         # Java version
   DISTRIBUTION: zulu                         # Java distribution
+  RESOURCE_GROUP: your-resource-group-name   # Replace with your Azure resource group
 
 on:
   push:
@@ -54,11 +55,12 @@ jobs:
         with:
           name: java-app
 
-      - name: Deploy to Azure Web App
+      - name: Deploy to Azure Web App using Azure CLI
         run: |
           jar_file=$(ls *.jar | head -n 1)
+          echo "Deploying $jar_file to Azure Web App..."
           az webapp deploy \
             --name ${{ env.AZURE_WEBAPP_NAME }} \
-            --resource-group YOUR_RESOURCE_GROUP \
+            --resource-group ${{ env.RESOURCE_GROUP }} \
             --src-path "$jar_file" \
             --type jar
