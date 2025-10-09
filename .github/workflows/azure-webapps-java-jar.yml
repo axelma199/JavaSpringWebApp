@@ -1,10 +1,10 @@
 name: Build and deploy JAR app to Azure Web App
 
 env:
-  AZURE_WEBAPP_NAME: AxelJavaSpringApp
-  JAVA_VERSION: '11'
-  DISTRIBUTION: zulu
-  RESOURCE_GROUP: AxelJavaSpringApp_group
+  AZURE_WEBAPP_NAME: AxelJavaSpringApp             # Your Azure Web App name
+  JAVA_VERSION: '11'                               # Java version
+  DISTRIBUTION: zulu                               # Java distribution
+  RESOURCE_GROUP: AxelJavaSpringApp_group          # Your Azure Resource Group
 
 on:
   push:
@@ -50,13 +50,6 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_55B9464E72AB4B7A9185B2B95F09A8A2 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_DD1BBF5E684D41F7A0BEEF0FA9F11F08 }}
 
-      - name: Install Azure CLI (if needed)
-        run: |
-          if ! command -v az &> /dev/null; then
-            echo "Installing Azure CLI..."
-            curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-          fi
-
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
@@ -71,4 +64,3 @@ jobs:
             --resource-group ${{ env.RESOURCE_GROUP }} \
             --src-path "$jar_file" \
             --type jar
-
