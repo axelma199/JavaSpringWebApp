@@ -1,10 +1,10 @@
 name: Build and deploy JAR app to Azure Web App
 
 env:
-  AZURE_WEBAPP_NAME: your-app-name              # Replace with your Web App name
+  AZURE_WEBAPP_NAME: AxelJavaSpringApp             # Replace with your Web App name
   JAVA_VERSION: '17'
   DISTRIBUTION: zulu
-  RESOURCE_GROUP: your-resource-group-name      # Replace with your resource group
+  RESOURCE_GROUP: AxelJavaSpringApp_group      # Replace with your resource group
 
 on:
   push:
