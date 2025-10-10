@@ -1,4 +1,4 @@
-name: Build and deploy JAR app to Azure Web App
+ name: Build and deploy JAR app to Azure Web App
 
 env:
   AZURE_WEBAPP_NAME: AxelJavaSpringApp             # Replace with your Web App name
