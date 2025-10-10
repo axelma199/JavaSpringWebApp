@@ -57,12 +57,22 @@ jobs:
         with:
           name: java-app
 
+      - name: Set startup command
+        run: |
+          az webapp config set \
+            --name ${{ env.AZURE_WEBAPP_NAME }} \
+            --resource-group ${{ env.RESOURCE_GROUP }} \
+            --startup-file "java -jar app.jar"
+
       - name: Deploy to Azure Web App using Azure CLI
         run: |
-          jar_file=$(find . -name "*.jar" | head -n 1)
-          echo "Deploying $jar_file to Azure Web App..."
+          mv *.jar app.jar
           az webapp deploy \
             --name ${{ env.AZURE_WEBAPP_NAME }} \
+            --resource-group ${{ env.RESOURCE_GROUP }} \
+            --src-path "app.jar" \
+            --type jar
+
             --resource-group ${{ env.RESOURCE_GROUP }} \
             --src-path "$jar_file" \
             --type jar
