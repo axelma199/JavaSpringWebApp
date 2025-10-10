@@ -46,9 +46,10 @@ jobs:
       - name: Azure Login
         uses: azure/login@v1
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_... }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_... }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_... }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_B6D801B815834431834CF9E2D42598DB }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_55B9464E72AB4B7A9185B2B95F09A8A2 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_DD1BBF5E684D41F7A0BEEF0FA9F11F08 }}
+
 
       - name: Download artifact
         uses: actions/download-artifact@v4
