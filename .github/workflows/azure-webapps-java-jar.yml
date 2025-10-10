@@ -1,4 +1,4 @@
-name: Build and deploy JAR app to Azure Web App
+ name: Build and deploy JAR app to Azure Web App
 
 on:
   push:
@@ -57,6 +57,9 @@ jobs:
         with:
           name: java-app
 
+      - name: Rename JAR to app.jar
+        run: mv *.jar app.jar
+
       - name: Set startup command
         run: |
           az webapp config set \
@@ -66,13 +69,8 @@ jobs:
 
       - name: Deploy to Azure Web App using Azure CLI
         run: |
-          mv *.jar app.jar
           az webapp deploy \
             --name ${{ env.AZURE_WEBAPP_NAME }} \
             --resource-group ${{ env.RESOURCE_GROUP }} \
             --src-path "app.jar" \
-            --type jar
-
-            --resource-group ${{ env.RESOURCE_GROUP }} \
-            --src-path "$jar_file" \
             --type jar
