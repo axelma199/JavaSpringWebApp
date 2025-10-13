@@ -17,7 +17,7 @@
 # For more information on the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # For more samples to get started with GitHub Action workflows to deploy to Azure: https://github.com/Azure/actions-workflow-samples
 
-name: Build Java Spring Web App
+name: Build and Deploy Java Spring Web App to Azure
 
 on:
   push:
@@ -26,7 +26,7 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -42,3 +42,10 @@ jobs:
       - name: Build with Maven
         run: mvn -B package --file pom.xml
         working-directory: ./JavaSpringWebApp
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: <YOUR_AZURE_WEBAPP_NAME>
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: ./JavaSpringWebApp/target/*.jar
