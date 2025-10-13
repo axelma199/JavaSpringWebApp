@@ -42,11 +42,7 @@ jobs:
       - name: Build with Maven
         run: mvn -B package --file pom.xml
 
-      - name: Azure CLI deploy with Maven
-        uses: azure/cli@v2
-        with:
-          inlineScript: |
-            mvn azure-webapp:deploy
-          azcliversion: 2.53.0  # optional: specify CLI version
+      - name: Deploy to Azure Web App with Maven
+        run: mvn azure-webapp:deploy
         env:
           AZURE_WEBAPP_PUBLISH_PROFILE: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
