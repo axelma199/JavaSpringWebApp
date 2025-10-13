@@ -46,11 +46,14 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file pom.xml
       working-directory: complete
+
+      
     - name: Azure WebApp
       uses: Azure/webapps-deploy@v3
       with:
         app-name: my-app-name
-        package: my/target/*.jar
+        package: complete/target/*.jar
+
 
     # Azure logout 
     - name: logout
