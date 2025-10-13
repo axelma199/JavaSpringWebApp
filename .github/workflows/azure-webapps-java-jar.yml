@@ -1,4 +1,4 @@
-name: Build and deploy JAR app to Azure Web App
+name: Build and deploy JAR app to Azure Web App - AxelJavaSpringApp
 
 on:
   push:
@@ -6,19 +6,17 @@ on:
       - main
   workflow_dispatch:
 
-permissions:
-  contents: read
-  id-token: write
-
 env:
-  AZURE_WEBAPP_NAME: AxelJavaSpringApp             # Your Azure Web App name
-  JAVA_VERSION: '17'                               # Java version
-  DISTRIBUTION: zulu                               # Java distribution
-  RESOURCE_GROUP: AxelJavaSpringApp_group          # Your Azure Resource Group
+  AZURE_WEBAPP_NAME: AxelJavaSpringApp       # Nombre de tu App Service
+  RESOURCE_GROUP: AxelJavaSpringApp_group    # Grupo de recursos
+  JAVA_VERSION: '17'
+  DISTRIBUTION: 'zulu'
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
 
     steps:
       - name: Checkout code
@@ -43,36 +41,14 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: build
+    permissions:
+      id-token: write
+      contents: read
 
     steps:
-      - name: Azure Login
-        uses: azure/login@v1
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_B6D801B815834431834CF9E2D42598DB }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_55B9464E72AB4B7A9185B2B95F09A8A2 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_DD1BBF5E684D41F7A0BEEF0FA9F11F08 }}
-
       - name: Download JAR artifact
         uses: actions/download-artifact@v4
         with:
           name: java-app
 
-      - name: Rename JAR to app.jar
-        run: mv *.jar app.jar
-
-      - name: Set startup command
-        run: |
-          az webapp config set \
-            --name ${{ env.AZURE_WEBAPP_NAME }} \
-            --resource-group ${{ env.RESOURCE_GROUP }} \
-            az webapp config set \ 
-           --startup-file "java -jar /home/site/wwwroot/app.jar"
-
-
-      - name: Deploy to Azure Web App using Azure CLI
-        run: |
-          az webapp deploy \
-            --name ${{ env.AZURE_WEBAPP_NAME }} \
-            --resource-group ${{ env.RESOURCE_GROUP }} \
-            --src-path "app.jar" \
-            --type jar
+      - name: Azure Login
