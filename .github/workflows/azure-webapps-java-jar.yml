@@ -65,7 +65,9 @@ jobs:
           az webapp config set \
             --name ${{ env.AZURE_WEBAPP_NAME }} \
             --resource-group ${{ env.RESOURCE_GROUP }} \
-            --startup-file "java -jar app.jar"
+            az webapp config set \ 
+           --startup-file "java -jar /home/site/wwwroot/app.jar"
+
 
       - name: Deploy to Azure Web App using Azure CLI
         run: |
