@@ -6,11 +6,15 @@ on:
       - main
   workflow_dispatch:
 
+permissions:
+  contents: read
+  id-token: write
+
 env:
-  AZURE_WEBAPP_NAME: AxelJavaSpringApp       # Nombre de tu App Service
-  RESOURCE_GROUP: AxelJavaSpringApp_group    # Grupo de recursos
+  AZURE_WEBAPP_NAME: AxelJavaSpringApp
   JAVA_VERSION: '17'
-  DISTRIBUTION: 'zulu'
+  DISTRIBUTION: 'microsoft'
+  RESOURCE_GROUP: AxelJavaSpringApp_group
 
 jobs:
   build:
@@ -46,9 +50,38 @@ jobs:
       contents: read
 
     steps:
-      - name: Download JAR artifact
+      - name: Download artifact
         uses: actions/download-artifact@v4
         with:
           name: java-app
 
-      - name: Azure Login
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
+
+      - name: Rename JAR to app.jar
+        run: mv *.jar app.jar
+
+      - name: Set startup command explicitly
+        run: |
+          az webapp config set \
+            --name ${{ env.AZURE_WEBAPP_NAME }} \
+            --resource-group ${{ env.RESOURCE_GROUP }} \
+            --startup-file "java -jar /home/site/wwwroot/app.jar"
+
+      - name: Deploy to Azure Web App
+        run: |
+          az webapp deploy \
+            --name ${{ env.AZURE_WEBAPP_NAME }} \
+            --resource-group ${{ env.RESOURCE_GROUP }} \
+            --src-path "app.jar" \
+            --type jar
+
+      - name: Restart App Service
+        run: |
+          az webapp restart \
+            --name ${{ env.AZURE_WEBAPP_NAME }} \
+            --resource-group ${{ env.RESOURCE_GROUP }}
