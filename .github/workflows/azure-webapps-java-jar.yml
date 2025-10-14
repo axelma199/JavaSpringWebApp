@@ -52,7 +52,7 @@ jobs:
         uses: Azure/webapps-deploy@v3
         with:
           app-name: AxelJavaSpringApp
-          package: target/app.jar
+          package: target/app.jar 
           startup-command: java -jar app.jar
 
       - name: Azure Logout
