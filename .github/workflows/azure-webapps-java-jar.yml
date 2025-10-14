@@ -55,7 +55,8 @@ jobs:
         with:
           app-name: AxelJavaSpringApp
           package: target/app.jar 
-          startup-command: java -jar app.jar
+          startup-command: java -jar /home/site/wwwroot/app.jar
+
 
       - name: Azure Logout
         run: az logout
