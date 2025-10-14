@@ -82,8 +82,9 @@
   </dependencies>
 
   <build>
-      <finalName>app-${project.version}-${maven.build.timestamp}</finalName>
-    <plugins>
+  <finalName>app</finalName>
+           
+           <plugins>
       <!-- Spring Boot Plugin for Executable JAR -->
     <plugin>
   <groupId>org.springframework.boot</groupId>
